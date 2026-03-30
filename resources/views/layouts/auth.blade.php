@@ -127,22 +127,8 @@
 
     <!-- ═══ GLOBAL SCRIPTS ═══ -->
     <script>
-        // ═══ PREMIUM LOADER ═══
-        window.addEventListener('load', function() {
-            const loader = document.getElementById('auth-loader');
-            if (loader) {
-                setTimeout(() => {
-                    loader.classList.add('hide');
-                    setTimeout(() => loader.remove(), 600);
-                    // Trigger page entrance animations after loader
-                    initPageAnimations();
-                }, 1000);
-            }
-        });
-
-        // Show loader on form submit
-        document.addEventListener('submit', function(e) {
-            if (e.defaultPrevented) return;
+        // Use a reusable function to show loader
+        function showAuthLoader(text = 'Processing', statusText = 'Please Wait') {
             let loader = document.getElementById('auth-loader');
             if (!loader) {
                 loader = document.createElement('div');
@@ -156,14 +142,38 @@
                             <div class="loader-icon-ring"></div>
                             <div class="loader-icon-gem"><i class="fa-solid fa-gem"></i></div>
                         </div>
-                        <div class="loader-brand">Processing</div>
+                        <div class="loader-brand">${text}</div>
                         <div class="loader-progress"><div class="loader-progress-bar"></div></div>
-                        <div class="loader-status">Please Wait</div>
+                        <div class="loader-status">${statusText}</div>
                     </div>`;
                 document.body.appendChild(loader);
             } else {
+                const brand = loader.querySelector('.loader-brand');
+                const status = loader.querySelector('.loader-status');
+                if (brand) brand.textContent = text;
+                if (status) status.textContent = statusText;
                 loader.classList.remove('hide');
             }
+        }
+
+        // ═══ PREMIUM LOADER ═══
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('auth-loader');
+            if (loader) {
+                // Removed the 1000ms artificial delay here so it hides instantly on load
+                loader.classList.add('hide');
+                setTimeout(() => {
+                    loader.remove();
+                    // Trigger page entrance animations after loader is removed
+                    initPageAnimations();
+                }, 600); // 600ms is the CSS animation duration for fading out
+            }
+        });
+
+        // Show loader on form submit
+        document.addEventListener('submit', function(e) {
+            if (e.defaultPrevented) return;
+            showAuthLoader('Processing', 'Please Wait');
         });
 
         // ═══ FLOATING PARTICLES ═══
@@ -231,13 +241,21 @@
                     e.preventDefault();
                     const targetUrl = this.href;
                     sessionStorage.setItem('playFlipIn', 'true');
+                    
+                    // Show loader directly before navigating out
                     gsap.to(authWrapper, {
                         rotationY: isReversed ? 90 : -90,
                         scale: 0.9,
                         opacity: 0,
-                        duration: 0.6,
+                        duration: 0.5,
                         ease: "power2.in",
-                        onComplete: () => { window.location.href = targetUrl; }
+                        onComplete: () => { 
+                            showAuthLoader(
+                                targetUrl.includes('register') ? 'Registration' : 'Authentication', 
+                                'Preparing Experience...'
+                            );
+                            window.location.href = targetUrl; 
+                        }
                     });
                 });
             });
@@ -373,11 +391,13 @@
         if (document.readyState === 'complete') {
             const loader = document.getElementById('auth-loader');
             if (loader && !loader.classList.contains('hide')) {
+                loader.classList.add('hide');
                 setTimeout(() => {
-                    loader.classList.add('hide');
-                    setTimeout(() => loader.remove(), 600);
+                    loader.remove();
                     initPageAnimations();
-                }, 800);
+                }, 600);
+            } else if (!document.getElementById('auth-loader')) {
+                initPageAnimations();
             }
         }
 
