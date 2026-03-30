@@ -1,0 +1,83 @@
+/* ═════════════════════════════════════
+   RESET & BASE STYLES
+   ═════════════════════════════════════ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-body, #f7fafc);
+    color: var(--text-primary, #1c1c1c);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* ═════════════════════════════════════
+   CONTAINER
+   ═════════════════════════════════════ */
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* ═════════════════════════════════════
+   UTILITIES
+   ═════════════════════════════════════ */
+
+.see-all {
+    color: var(--primary, #0d6efd);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.arrow {
+    transition: 0.3s;
+}
+
+.filter-header.active .arrow {
+    transform: rotate(180deg);
+}
+
+/* ═════════════════════════════════════
+   FORM ELEMENTS (DARK MODE READY)
+   ═════════════════════════════════════ */
+
+.inquiry-form {
+    background: var(--bg-card, #fff);
+    padding: 25px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    flex-shrink: 1;
+    box-shadow: var(--shadow-md, 0 4px 20px rgba(0, 0, 0, 0.1));
+    border: 1px solid var(--border, #e2e8f0);
+}
