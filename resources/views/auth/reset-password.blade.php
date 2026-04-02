@@ -1,8 +1,6 @@
 @extends('layouts.auth')
 
 @section('title', 'Reset Password')
-@section('showcase-image', asset('images/auth/security-shield.png'))
-@section('showcase-alt', 'Secure Password Reset')
 @section('showcase-badge', 'SECURE RESET')
 @section('showcase-title')
 Set a <span>Strong</span> Password
@@ -23,14 +21,6 @@ Set a <span>Strong</span> Password
         <h3 class="gs-reveal">Set New Password</h3>
         <p class="gs-reveal">Choose a strong password for your account</p>
     </div>
-
-    @if($errors->any())
-        <div class="alert alert-danger gs-reveal">
-            <ul style="list-style:none;padding:0;margin:0;">
-                @foreach ($errors->all() as $error)<li><i class="fa-solid fa-circle-exclamation"></i> {{ $error }}</li>@endforeach
-            </ul>
-        </div>
-    @endif
 
     <form method="POST" action="{{ route('password.update') }}">
         @csrf
@@ -86,5 +76,13 @@ Set a <span>Strong</span> Password
         if (i.type === 'password') { i.type = 'text'; el.classList.replace('fa-eye', 'fa-eye-slash'); }
         else { i.type = 'password'; el.classList.replace('fa-eye-slash', 'fa-eye'); }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                PremiumToast.error("{{ $error }}");
+            @endforeach
+        @endif
+    });
 </script>
 @endsection

@@ -1,8 +1,6 @@
 @extends('layouts.auth')
 
 @section('title', 'Create Account')
-@section('showcase-image', asset('images/auth/watch-collection.png'))
-@section('showcase-alt', 'Luxury Watch Collection')
 @section('showcase-badge', 'JOIN THE COMMUNITY')
 @section('showcase-title')
 Start Your <span>Journey</span> Today
@@ -74,7 +72,7 @@ Start Your <span>Journey</span> Today
             </div>
         </div>
 
-        <button type="submit" class="btn-submit gs-reveal" style="margin-top: 4px;">
+        <button type="submit" class="btn-submit gs-reveal">
             <span>CREATE ACCOUNT</span>
             <i class="fa-solid fa-arrow-right"></i>
         </button>
@@ -113,14 +111,13 @@ Start Your <span>Journey</span> Today
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const dk = document.documentElement.getAttribute('data-theme') !== 'light';
         @if(session('success'))
-            Swal.fire({ icon:'success', title:'Success!', text:"{{ session('success') }}", timer:4000, showConfirmButton:false,
-                background: dk?'#0f172a':'#fff', color: dk?'#e2e8f0':'#0f172a', iconColor:'#06b6d4' });
+            PremiumToast.success("{{ session('success') }}");
         @endif
         @if($errors->any())
-            Swal.fire({ icon:'error', title:'Error!', text:"{{ $errors->first() }}",
-                background: dk?'#0f172a':'#fff', color: dk?'#e2e8f0':'#0f172a' });
+            @foreach($errors->all() as $error)
+                PremiumToast.error("{{ $error }}");
+            @endforeach
         @endif
     });
 </script>

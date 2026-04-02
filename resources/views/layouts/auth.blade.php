@@ -13,14 +13,10 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/auth-premium.css') }}?v={{ time() }}">
     
-    <!-- GSAP + ScrollTrigger -->
+    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
     <!-- Theme JS -->
@@ -56,6 +52,9 @@
         <div class="auth-particles" id="particles-container"></div>
     </div>
 
+    <!-- ═══ PREMIUM TOAST NOTIFICATIONS ═══ -->
+    <div class="toast-container" id="toast-container"></div>
+
     <!-- ═══ THEME TOGGLE ═══ -->
     <div class="auth-theme-toggle">
         <button class="theme-btn theme-toggle" title="Toggle Theme">
@@ -71,14 +70,43 @@
                 @yield('content')
             </div>
 
-            <!-- RIGHT: Showcase Image Panel -->
+            <!-- RIGHT: Showcase Slider Panel -->
             <div class="auth-panel-right" id="showcase-panel">
-                <div class="auth-showcase-img">
-                    <img src="@yield('showcase-image', asset('images/auth/watch-showcase.png'))" 
-                         alt="@yield('showcase-alt', 'Premium Watches')" 
-                         id="showcase-img">
+                <!-- Slides Container -->
+                <div class="showcase-slider" id="showcase-slider">
+                    @php
+                        $slides = [
+                            ['img' => 'watch-slide-1.png', 'alt' => 'Luxury Chronograph'],
+                            ['img' => 'watch-slide-2.png', 'alt' => 'Watch Collection'],
+                            ['img' => 'watch-slide-3.png', 'alt' => 'Dress Watch'],
+                            ['img' => 'watch-slide-4.png', 'alt' => 'Dive Watch'],
+                        ];
+                    @endphp
+                    @foreach($slides as $index => $slide)
+                        <div class="showcase-slide {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
+                            <img src="{{ asset('images/auth/' . $slide['img']) }}" alt="{{ $slide['alt'] }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+                        </div>
+                    @endforeach
                 </div>
+
+                <!-- Gradient overlays -->
                 <div class="auth-showcase-overlay"></div>
+
+                <!-- Slider progress bar -->
+                <div class="showcase-slider-progress">
+                    <div class="showcase-slider-progress-bar" id="slider-progress-bar"></div>
+                </div>
+
+                <!-- Slider dots -->
+                <div class="showcase-slider-dots" id="slider-dots">
+                    @foreach($slides as $index => $slide)
+                        <button class="slider-dot {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}" aria-label="Go to slide {{ $index + 1 }}">
+                            <span class="dot-fill"></span>
+                        </button>
+                    @endforeach
+                </div>
+
+                <!-- Text Content -->
                 <div class="auth-showcase-content" id="showcase-content">
                     <div class="auth-showcase-badge gs-reveal-right">
                         <i class="fa-solid fa-gem"></i>
@@ -127,7 +155,98 @@
 
     <!-- ═══ GLOBAL SCRIPTS ═══ -->
     <script>
-        // Use a reusable function to show loader
+        // ═══ PREMIUM TOAST NOTIFICATION SYSTEM ═══
+        const PremiumToast = {
+            container: null,
+            init() {
+                this.container = document.getElementById('toast-container');
+            },
+            show({ type = 'info', title = '', message = '', duration = 5000 }) {
+                if (!this.container) this.init();
+
+                const toast = document.createElement('div');
+                toast.className = `premium-toast toast-${type}`;
+
+                const icons = {
+                    success: 'fa-circle-check',
+                    error:   'fa-circle-xmark',
+                    warning: 'fa-triangle-exclamation',
+                    info:    'fa-circle-info'
+                };
+
+                const iconLabels = {
+                    success: 'Success',
+                    error:   'Error',
+                    warning: 'Warning',
+                    info:    'Info'
+                };
+
+                toast.innerHTML = `
+                    <div class="toast-accent"></div>
+                    <div class="toast-icon-wrap">
+                        <div class="toast-icon-bg">
+                            <i class="fa-solid ${icons[type] || icons.info}"></i>
+                        </div>
+                        <div class="toast-icon-pulse"></div>
+                    </div>
+                    <div class="toast-body">
+                        <div class="toast-header">
+                            <span class="toast-type-label">${iconLabels[type] || 'Info'}</span>
+                            ${title ? `<span class="toast-title">${title}</span>` : ''}
+                        </div>
+                        <p class="toast-message">${message}</p>
+                    </div>
+                    <button class="toast-close" onclick="PremiumToast.dismiss(this.closest('.premium-toast'))">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <div class="toast-timer">
+                        <div class="toast-timer-bar" style="animation-duration: ${duration}ms"></div>
+                    </div>
+                `;
+
+                this.container.appendChild(toast);
+
+                // Entrance animation
+                requestAnimationFrame(() => {
+                    toast.classList.add('toast-entering');
+                    setTimeout(() => toast.classList.add('toast-visible'), 20);
+                });
+
+                // Auto-dismiss
+                const timer = setTimeout(() => this.dismiss(toast), duration);
+                toast._timer = timer;
+
+                // Pause timer on hover
+                toast.addEventListener('mouseenter', () => {
+                    clearTimeout(toast._timer);
+                    const bar = toast.querySelector('.toast-timer-bar');
+                    if (bar) bar.style.animationPlayState = 'paused';
+                });
+                toast.addEventListener('mouseleave', () => {
+                    const bar = toast.querySelector('.toast-timer-bar');
+                    if (bar) bar.style.animationPlayState = 'running';
+                    toast._timer = setTimeout(() => this.dismiss(toast), 2000);
+                });
+
+                return toast;
+            },
+            dismiss(toast) {
+                if (!toast || toast._dismissed) return;
+                toast._dismissed = true;
+                clearTimeout(toast._timer);
+                toast.classList.add('toast-exiting');
+                toast.classList.remove('toast-visible');
+                setTimeout(() => {
+                    if (toast.parentNode) toast.parentNode.removeChild(toast);
+                }, 500);
+            },
+            success(message, title = '') { return this.show({ type: 'success', title, message }); },
+            error(message, title = '')   { return this.show({ type: 'error', title, message }); },
+            warning(message, title = '') { return this.show({ type: 'warning', title, message }); },
+            info(message, title = '')    { return this.show({ type: 'info', title, message }); },
+        };
+
+        // ═══ PREMIUM LOADER ═══
         function showAuthLoader(text = 'Processing', statusText = 'Please Wait') {
             let loader = document.getElementById('auth-loader');
             if (!loader) {
@@ -156,17 +275,14 @@
             }
         }
 
-        // ═══ PREMIUM LOADER ═══
         window.addEventListener('load', function() {
             const loader = document.getElementById('auth-loader');
             if (loader) {
-                // Removed the 1000ms artificial delay here so it hides instantly on load
                 loader.classList.add('hide');
                 setTimeout(() => {
                     loader.remove();
-                    // Trigger page entrance animations after loader is removed
                     initPageAnimations();
-                }, 600); // 600ms is the CSS animation duration for fading out
+                }, 600);
             }
         });
 
@@ -204,6 +320,131 @@
             }
         })();
 
+        // ═══ SHOWCASE IMAGE SLIDER ═══
+        (function() {
+            const slides = document.querySelectorAll('.showcase-slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            const progressBar = document.getElementById('slider-progress-bar');
+            if (slides.length <= 1) return;
+
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+            const interval = 5000; // 5 seconds per slide
+            let timer = null;
+            let isTransitioning = false;
+
+            function goToSlide(idx, direction = 'next') {
+                if (isTransitioning || idx === currentIndex) return;
+                isTransitioning = true;
+
+                const oldSlide = slides[currentIndex];
+                const newSlide = slides[idx];
+
+                // Update dots
+                dots.forEach(d => d.classList.remove('active'));
+                dots[idx].classList.add('active');
+
+                // Reset progress bar
+                if (progressBar) {
+                    progressBar.style.transition = 'none';
+                    progressBar.style.width = '0%';
+                }
+
+                // Determine direction
+                const isNext = direction === 'next' || idx > currentIndex;
+
+                // Animation: crossfade + subtle Ken Burns
+                newSlide.classList.add('active');
+                const img = newSlide.querySelector('img');
+                const oldImg = oldSlide.querySelector('img');
+
+                // Set initial states
+                gsap.set(newSlide, { opacity: 0, zIndex: 2 });
+                gsap.set(oldSlide, { zIndex: 1 });
+
+                // Scale effect for Ken Burns
+                if (img) {
+                    gsap.fromTo(img, 
+                        { scale: 1.15, x: isNext ? 30 : -30 },
+                        { scale: 1.05, x: 0, duration: 1.4, ease: "power2.out" }
+                    );
+                }
+
+                // Crossfade
+                gsap.to(newSlide, {
+                    opacity: 1,
+                    duration: 1,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        oldSlide.classList.remove('active');
+                        gsap.set(oldSlide, { opacity: 0, zIndex: 0 });
+                        gsap.set(newSlide, { zIndex: 1 });
+                        currentIndex = idx;
+                        isTransitioning = false;
+
+                        // Restart progress
+                        startProgress();
+                    }
+                });
+
+                // Fade out old
+                if (oldImg) {
+                    gsap.to(oldImg, { scale: 1.1, duration: 1, ease: "power2.in" });
+                }
+            }
+
+            function nextSlide() {
+                const next = (currentIndex + 1) % totalSlides;
+                goToSlide(next, 'next');
+            }
+
+            function startProgress() {
+                if (progressBar) {
+                    requestAnimationFrame(() => {
+                        progressBar.style.transition = `width ${interval}ms linear`;
+                        progressBar.style.width = '100%';
+                    });
+                }
+            }
+
+            function startAutoplay() {
+                stopAutoplay();
+                startProgress();
+                timer = setInterval(nextSlide, interval);
+            }
+
+            function stopAutoplay() {
+                if (timer) clearInterval(timer);
+                timer = null;
+            }
+
+            // Dot clicks
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    stopAutoplay();
+                    goToSlide(i, i > currentIndex ? 'next' : 'prev');
+                    // Restart after a pause
+                    setTimeout(startAutoplay, interval);
+                });
+            });
+
+            // Pause on hover
+            const panel = document.getElementById('showcase-panel');
+            if (panel) {
+                panel.addEventListener('mouseenter', stopAutoplay);
+                panel.addEventListener('mouseleave', startAutoplay);
+            }
+
+            // Initial Ken Burns on first slide
+            const firstImg = slides[0] && slides[0].querySelector('img');
+            if (firstImg) {
+                gsap.fromTo(firstImg, { scale: 1.1 }, { scale: 1.02, duration: 12, ease: "none", repeat: -1, yoyo: true });
+            }
+
+            // Start
+            startAutoplay();
+        })();
+
         // ═══ PAGE ENTRANCE ANIMATIONS (GSAP) ═══
         function initPageAnimations() {
             const authWrapper = document.getElementById('auth-wrapper');
@@ -219,7 +460,7 @@
                 );
             }
 
-            // Card entrance — cinematic slide up + fade
+            // Card entrance
             const card = document.querySelector('.auth-card');
             if (card && !playFlipIn) {
                 gsap.to(card, {
@@ -230,11 +471,10 @@
                     delay: 0.1
                 });
             } else if (card) {
-               // Ensure visible if flipped
                gsap.set(card, { opacity: 1, y: 0 });
             }
 
-            // Intercept flip toggles across pages
+            // Intercept flip toggles
             document.querySelectorAll('.flip-trigger').forEach(link => {
                 link.addEventListener('click', function(e) {
                     if (e.defaultPrevented || window.innerWidth <= 860) return; 
@@ -242,7 +482,6 @@
                     const targetUrl = this.href;
                     sessionStorage.setItem('playFlipIn', 'true');
                     
-                    // Show loader directly before navigating out
                     gsap.to(authWrapper, {
                         rotationY: isReversed ? 90 : -90,
                         scale: 0.9,
@@ -285,7 +524,7 @@
                 }
             );
 
-            // Brand name — typed reveal feel
+            // Brand name — typed reveal
             gsap.fromTo(".auth-brand-name",
                 { opacity: 0, x: -20 },
                 { 
@@ -297,20 +536,9 @@
                 }
             );
 
-            // Showcase panel — right side animations
+            // Showcase panel animations
             const showcasePanel = document.getElementById('showcase-panel');
-            if (showcasePanel && window.innerWidth > 860) {
-                // Image parallax entrance
-                gsap.fromTo("#showcase-img",
-                    { scale: 1.2, opacity: 0 },
-                    { 
-                        scale: 1, opacity: 1, 
-                        duration: 1.5, 
-                        ease: "power2.out", 
-                        delay: 0.2 
-                    }
-                );
-
+            if (showcasePanel) {
                 // Showcase content — slide from right
                 gsap.fromTo(".auth-showcase-content .gs-reveal-right",
                     { opacity: 0, x: 50 },
@@ -387,7 +615,7 @@
             }
         }
 
-        // Fallback — if load already fired
+        // Fallback
         if (document.readyState === 'complete') {
             const loader = document.getElementById('auth-loader');
             if (loader && !loader.classList.contains('hide')) {
@@ -401,7 +629,7 @@
             }
         }
 
-        // Safety fallback — guarantee animations fire within 3s max
+        // Safety fallback
         let _animInit = false;
         const _origInit = initPageAnimations;
         initPageAnimations = function() {

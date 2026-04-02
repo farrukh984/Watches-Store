@@ -1,8 +1,6 @@
 @extends('layouts.auth')
 
 @section('title', 'Forgot Password')
-@section('showcase-image', asset('images/auth/security-shield.png'))
-@section('showcase-alt', 'Secure Account Recovery')
 @section('showcase-badge', 'SECURE RECOVERY')
 @section('showcase-title')
 We've Got <span>You</span> Covered
@@ -38,17 +36,6 @@ We've Got <span>You</span> Covered
         <p class="gs-reveal">Enter your email and we'll send you a secure reset link</p>
     </div>
 
-    @if(session('status') || session('success'))
-        <div class="alert alert-success gs-reveal"><i class="fa-solid fa-circle-check"></i> {{ session('status') ?? session('success') }}</div>
-    @endif
-    @if($errors->any())
-        <div class="alert alert-danger gs-reveal">
-            <ul style="list-style:none;padding:0;margin:0;">
-                @foreach ($errors->all() as $error)<li><i class="fa-solid fa-circle-exclamation"></i> {{ $error }}</li>@endforeach
-            </ul>
-        </div>
-    @endif
-
     <form method="POST" action="{{ route('password.email') }}">
         @csrf
         <div class="form-group gs-reveal">
@@ -78,6 +65,15 @@ We've Got <span>You</span> Covered
 
 @section('scripts')
 <script>
-    // No extra scripts needed — layout handles all GSAP animations
+    document.addEventListener('DOMContentLoaded', () => {
+        @if(session('status') || session('success'))
+            PremiumToast.success("{{ session('status') ?? session('success') }}");
+        @endif
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                PremiumToast.error("{{ $error }}");
+            @endforeach
+        @endif
+    });
 </script>
 @endsection

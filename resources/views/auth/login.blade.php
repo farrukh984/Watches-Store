@@ -1,8 +1,6 @@
 @extends('layouts.auth')
 
 @section('title', 'Sign In')
-@section('showcase-image', asset('images/auth/watch-showcase.png'))
-@section('showcase-alt', 'Luxury Watch Showcase')
 @section('showcase-badge', 'PREMIUM COLLECTION')
 @section('showcase-title')
 Discover <span>Timeless</span> Elegance
@@ -91,14 +89,11 @@ Discover <span>Timeless</span> Elegance
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const dk = document.documentElement.getAttribute('data-theme') !== 'light';
         @if(session('success'))
-            Swal.fire({ icon:'success', title:'Success!', text:"{{ session('success') }}", timer:4000, showConfirmButton:false,
-                background: dk?'#0f172a':'#fff', color: dk?'#e2e8f0':'#0f172a', iconColor:'#06b6d4' });
+            PremiumToast.success("{{ session('success') }}");
         @endif
         @if($errors->any())
-            Swal.fire({ icon:'error', title:'Error!', text:"{{ $errors->first() }}",
-                background: dk?'#0f172a':'#fff', color: dk?'#e2e8f0':'#0f172a' });
+            PremiumToast.error("{{ $errors->first() }}");
         @endif
     });
 </script>

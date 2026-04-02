@@ -1,8 +1,6 @@
 @extends('layouts.auth')
 
 @section('title', 'Admin OTP Verification')
-@section('showcase-image', asset('images/auth/security-shield.png'))
-@section('showcase-alt', 'Admin Security Verification')
 @section('showcase-badge', 'ADMIN ACCESS')
 @section('showcase-title')
 Secure <span>Admin</span> Portal
@@ -37,22 +35,6 @@ Secure <span>Admin</span> Portal
         <h3 class="gs-reveal">Enter OTP Code</h3>
         <p class="gs-reveal">Verify your identity to access admin dashboard</p>
     </div>
-
-    @if(session('success'))
-        <div class="alert alert-success gs-reveal">
-            <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
-        </div>
-    @endif
-
-    @if($errors->any())
-        <div class="alert alert-danger gs-reveal">
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                @foreach ($errors->all() as $error)
-                    <li><i class="fa-solid fa-circle-exclamation"></i> {{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <form method="POST" action="{{ route('admin.otp.verify') }}">
         @csrf
@@ -90,6 +72,15 @@ Secure <span>Admin</span> Portal
 
 @section('scripts')
 <script>
-    // Layout handles all GSAP animations
+    document.addEventListener('DOMContentLoaded', () => {
+        @if(session('success'))
+            PremiumToast.success("{{ session('success') }}");
+        @endif
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                PremiumToast.error("{{ $error }}");
+            @endforeach
+        @endif
+    });
 </script>
 @endsection
