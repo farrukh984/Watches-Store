@@ -4,199 +4,114 @@
     <meta charset="utf-8">
     <title>Admin OTP</title>
     <style>
-        /* paste the CSS here or inline later */
-
-/* admin-otp.css – Modern, professional styles for admin OTP email */
-
-/* Reset & base styles (safe for email clients) */
+/* Base styles */
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #f4f6f9;
+    margin: 0; padding: 0;
+    background-color: #0f0f11;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    color: #1e293b;
+    line-height: 1.6; color: #e2e8f0;
 }
 
-/* Main email container – centered card */
 .email-wrapper {
-    width: 100%;
-    table-layout: fixed;
-    background-color: #f4f6f9;
-    padding: 40px 0;
+    width: 100%; table-layout: fixed;
+    background-color: #0f0f11; padding: 50px 0;
 }
 
 .email-container {
-    max-width: 480px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    border-radius: 24px;
-    box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.1), 0 5px 10px -4px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    border: 1px solid #e9eef2;
-}
-
-/* Content padding */
-.email-content {
-    padding: 40px 32px;
-}
-
-/* Brand header */
-.brand-header {
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.brand-name {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: #2563eb; /* fallback */
-}
-
-/* Greeting text */
-.greeting {
-    font-size: 18px;
-    font-weight: 500;
-    margin-bottom: 12px;
-    color: #0f172a;
-}
-
-.greeting span {
-    font-weight: 600;
-    color: #2563eb;
-}
-
-/* Message */
-.message {
-    font-size: 16px;
-    color: #475569;
-    margin-bottom: 28px;
-}
-
-/* OTP code display */
-.otp-container {
-    text-align: center;
-    margin: 32px 0;
-}
-
-.otp-label {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-    color: #64748b;
-    margin-bottom: 10px;
-}
-
-.otp-code {
-    display: inline-block;
-    font-size: 42px;
-    font-weight: 700;
-    letter-spacing: 8px;
-    padding: 16px 24px;
-    background: linear-gradient(145deg, #f8fafc, #f1f5f9);
-    border: 2px dashed #2563eb;
-    border-radius: 20px;
-    color: #1e293b;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-    font-family: 'Courier New', monospace;
-}
-
-/* Expiry note */
-.expiry-note {
-    font-size: 14px;
-    color: #64748b;
-    background: #f8fafc;
-    padding: 16px 20px;
+    max-width: 500px; margin: 0 auto;
+    background-color: #1a1a1e;
     border-radius: 16px;
-    margin: 28px 0 20px;
-    border-left: 4px solid #2563eb;
-    text-align: left;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
 }
 
-.expiry-note i {
-    color: #2563eb;
-    margin-right: 6px;
+/* Header */
+.header {
+    text-align: center; padding: 35px 20px 20px;
+}
+.brand-name {
+    font-size: 28px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #d4af37; /* Gold accent */
 }
 
-/* Support text */
-.support-text {
-    font-size: 14px;
-    color: #94a3b8;
-    margin: 24px 0 10px;
-    border-top: 1px solid #e2e8f0;
-    padding-top: 24px;
-    text-align: center;
+/* Content */
+.email-content {
+    padding: 10px 40px 40px; text-align: center;
+}
+.greeting {
+    font-size: 18px; font-weight: 500;
+    color: #f8fafc; margin-bottom: 8px;
+}
+.greeting span { color: #d4af37; }
+.message {
+    font-size: 15px; color: #94a3b8; margin-bottom: 30px;
 }
 
-.support-text a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
+/* OTP Box */
+.otp-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(212, 175, 55, 0.4);
+    border-radius: 12px; padding: 25px 20px;
+    margin-bottom: 25px;
+}
+.otp-label {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+    color: #64748b; margin-bottom: 12px;
+}
+.otp-code {
+    font-size: 40px; font-weight: 700;
+    letter-spacing: 10px; color: #d4af37;
+    font-family: 'Courier New', monospace; margin: 0;
 }
 
-.support-text a:hover {
-    text-decoration: underline;
+/* Note */
+.expiry-note {
+    font-size: 13px; color: #94a3b8;
+    background: rgba(0,0,0,0.2);
+    padding: 15px; border-radius: 8px;
+    border-left: 3px solid #d4af37;
+    text-align: left; margin-bottom: 25px;
 }
 
-/* Footer signature */
-.signature {
-    font-size: 16px;
-    font-weight: 500;
-    color: #0f172a;
-    margin-top: 24px;
-    text-align: center;
+/* Footer */
+.footer {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 25px; font-size: 13px; color: #64748b;
 }
+.footer a { color: #d4af37; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
 
-.signature i {
-    color: #2563eb;
-    margin: 0 4px;
-}
-
-/* Responsive touch */
 @media only screen and (max-width: 600px) {
-    .email-container {
-        border-radius: 16px;
-        margin: 0 16px;
-    }
-    .email-content {
-        padding: 32px 20px;
-    }
-    .otp-code {
-        font-size: 36px;
-        letter-spacing: 6px;
-        padding: 12px 16px;
-    }
+    .email-container { margin: 0 15px; }
+    .email-content { padding: 10px 25px 30px; }
+    .otp-code { font-size: 32px; letter-spacing: 6px; }
 }
-
     </style>
 </head>
-<body style="margin:0; padding:0; background:#f4f6f9; font-family: 'Inter', ...;">
+<body style="margin:0; padding:0; background:#0f0f11;">
     <div class="email-wrapper">
         <div class="email-container">
+            <div class="header">
+                <div class="brand-name">{{ config('app.name') }}</div>
+            </div>
             <div class="email-content">
-                <div class="brand-header">
-                    <div class="brand-name">ShopBrand</div>
-                </div>
                 <div class="greeting">Hello <span>{{ $user->name }}</span>,</div>
-                <div class="message">Your one-time admin login code is:</div>
-                <div class="otp-container">
-                    <div class="otp-label">Verification code</div>
+                <div class="message">Your secure Admin Login OTP code is ready:</div>
+                
+                <div class="otp-box">
+                    <div class="otp-label">Verification Code</div>
                     <div class="otp-code">{{ $otp }}</div>
                 </div>
+                
                 <div class="expiry-note">
-                    <i class="fa-regular fa-clock"></i> This code expires in 10 minutes.
+                    <i>&#9888;</i> This code is strictly confidential and expires in 10 minutes. Do not share it with anyone.
                 </div>
-                <div class="support-text">
-                    If you did not request this, please <a href="mailto:support@shopbrand.com">contact support</a>.
-                </div>
-                <div class="signature">
-                    <i class="fa-regular fa-shield"></i> ShopBrand Security
+                
+                <div class="footer">
+                    If you did not request this, please <a href="mailto:support@watchesstore.com">contact support</a> immediately.<br><br>
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
                 </div>
             </div>
         </div>

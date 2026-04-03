@@ -4,188 +4,114 @@
     <meta charset="UTF-8">
     <title>Reset Your Password</title>
     <style>
-        /* paste the CSS here or link externally (not recommended for email) */
-
-        /* password-reset-otp.css – Modern, professional styles for password reset OTP email */
-
-/* Base reset for email clients */
+/* Base styles */
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #f1f5f9;
+    margin: 0; padding: 0;
+    background-color: #0f0f11;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    color: #1e293b;
+    line-height: 1.6; color: #e2e8f0;
 }
 
-/* Outer wrapper for full background */
 .email-wrapper {
-    width: 100%;
-    background-color: #f1f5f9;
-    padding: 40px 0;
+    width: 100%; table-layout: fixed;
+    background-color: #0f0f11; padding: 50px 0;
 }
 
-/* Main card container */
-.container {
-    max-width: 560px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    border-radius: 32px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+.email-container {
+    max-width: 500px; margin: 0 auto;
+    background-color: #1a1a1e;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    border: 1px solid rgba(226, 232, 240, 0.6);
 }
 
-/* Inner padding */
-.inner-content {
-    padding: 40px 36px;
-}
-
-/* Header with brand */
+/* Header */
 .header {
-    text-align: center;
-    margin-bottom: 32px;
+    text-align: center; padding: 35px 20px 20px;
+}
+.brand-name {
+    font-size: 28px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #d4af37; /* Gold accent */
 }
 
-.header h1 {
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    background: linear-gradient(145deg, #2563eb, #1e40af);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: #2563eb; /* fallback */
-    margin: 0;
+/* Content */
+.email-content {
+    padding: 10px 40px 40px; text-align: center;
+}
+.greeting {
+    font-size: 18px; font-weight: 500;
+    color: #f8fafc; margin-bottom: 8px;
+}
+.greeting span { color: #d4af37; }
+.message {
+    font-size: 15px; color: #94a3b8; margin-bottom: 30px;
 }
 
-/* Main content area */
-.content {
-    background: #f8fafc;
-    padding: 36px 28px;
-    border-radius: 28px;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);
+/* OTP Box */
+.otp-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(212, 175, 55, 0.4);
+    border-radius: 12px; padding: 25px 20px;
+    margin-bottom: 25px;
 }
-
-.content h2 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #0f172a;
-    margin: 0 0 12px 0;
+.otp-label {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+    color: #64748b; margin-bottom: 12px;
 }
-
-.content p {
-    font-size: 16px;
-    color: #475569;
-    margin: 12px 0;
-}
-
-/* OTP code display */
 .otp-code {
-    font-size: 44px;
-    font-weight: 700;
-    letter-spacing: 8px;
-    color: #2563eb;
-    background: linear-gradient(145deg, #ffffff, #f1f5f9);
-    padding: 18px 24px;
-    border-radius: 20px;
-    display: inline-block;
-    margin: 24px 0 16px;
-    border: 2px solid #2563eb;
-    box-shadow: 0 8px 20px -8px rgba(37, 99, 235, 0.3);
-    font-family: 'Courier New', monospace;
+    font-size: 40px; font-weight: 700;
+    letter-spacing: 10px; color: #d4af37;
+    font-family: 'Courier New', monospace; margin: 0;
 }
 
-/* Expiry note */
+/* Note */
 .expiry-note {
-    font-size: 14px;
-    color: #64748b;
-    background: #ffffff;
-    padding: 14px 18px;
-    border-radius: 40px;
-    display: inline-block;
-    margin: 16px 0 8px;
-    border: 1px solid #e2e8f0;
-}
-
-.expiry-note i {
-    color: #2563eb;
-    margin-right: 6px;
-}
-
-/* Divider */
-.divider {
-    height: 1px;
-    background: linear-gradient(to right, transparent, #e2e8f0, transparent);
-    margin: 30px 0 20px;
+    font-size: 13px; color: #94a3b8;
+    background: rgba(0,0,0,0.2);
+    padding: 15px; border-radius: 8px;
+    border-left: 3px solid #d4af37;
+    text-align: left; margin-bottom: 25px;
 }
 
 /* Footer */
 .footer {
-    text-align: center;
-    font-size: 13px;
-    color: #94a3b8;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 25px; font-size: 13px; color: #64748b;
 }
+.footer a { color: #d4af37; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
 
-.footer p {
-    margin: 8px 0;
-}
-
-.footer a {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-}
-
-/* Small responsiveness */
 @media only screen and (max-width: 600px) {
-    .email-wrapper {
-        padding: 20px 12px;
-    }
-    .container {
-        border-radius: 24px;
-    }
-    .inner-content {
-        padding: 32px 20px;
-    }
-    .content {
-        padding: 28px 16px;
-    }
-    .otp-code {
-        font-size: 36px;
-        letter-spacing: 6px;
-        padding: 14px 18px;
-    }
+    .email-container { margin: 0 15px; }
+    .email-content { padding: 10px 25px 30px; }
+    .otp-code { font-size: 32px; letter-spacing: 6px; }
 }
     </style>
 </head>
-<body style="margin:0; padding:0; background:#f1f5f9;">
+<body style="margin:0; padding:0; background:#0f0f11;">
     <div class="email-wrapper">
-        <div class="container">
-            <div class="inner-content">
-                <div class="header">
-                    <h1>ShopBrand.</h1>
-                </div>
-                <div class="content">
-                    <h2>Reset Your Password</h2>
-                    <p>Hello {{ $user->name }},</p>
-                    <p>You requested a password reset. Use the following 6‑digit OTP code to proceed:</p>
+        <div class="email-container">
+            <div class="header">
+                <div class="brand-name">{{ config('app.name') }}</div>
+            </div>
+            <div class="email-content">
+                <div class="greeting">Hello <span>{{ $user->name }}</span>,</div>
+                <div class="message">You requested to reset your password. Use the following code to proceed:</div>
+                
+                <div class="otp-box">
+                    <div class="otp-label">Security Code</div>
                     <div class="otp-code">{{ $otp }}</div>
-                    <div class="expiry-note">
-                        <i class="fa-regular fa-clock"></i> Expires in 10 minutes
-                    </div>
-                    <p>If you did not request this, please ignore this email.</p>
                 </div>
-                <div class="divider"></div>
+                
+                <div class="expiry-note">
+                    <i>&#9888;</i> This code expires in 10 minutes. If you did not request a password reset, please ignore this email or update your password if you feel your account is at risk.
+                </div>
+                
                 <div class="footer">
-                    <p>© 2026 ShopBrand Inc. All rights reserved.</p>
-                    <p><a href="mailto:support@shopbrand.com">support@shopbrand.com</a></p>
+                    &copy; {{ date('Y') }} {{ config('app.name') }} Inc. All rights reserved.<br>
+                    <a href="mailto:support@watchesstore.com">support@watchesstore.com</a>
                 </div>
             </div>
         </div>

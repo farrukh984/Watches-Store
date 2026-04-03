@@ -1,54 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <title>Security Alert</title>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
-        .wrapper { width: 100%; padding: 40px 0; }
-        .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .header { background: linear-gradient(135deg, #0ea5e9, #4f46e5); padding: 40px 20px; text-align: center; color: #ffffff; }
-        .content { padding: 40px; color: #334155; line-height: 1.6; }
-        .details { background: #f1f5f9; border-radius: 12px; padding: 20px; margin: 24px 0; }
-        .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
-        .detail-row:last-child { margin-bottom: 0; }
-        .label { font-weight: 600; color: #64748b; }
-        .value { font-weight: 700; color: #0f172a; }
-        .footer { padding: 20px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
-        .button { display: inline-block; background: #4f46e5; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; margin-top: 20px; }
+/* Base styles */
+body {
+    margin: 0; padding: 0;
+    background-color: #0f0f11;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: #e2e8f0;
+}
+
+.email-wrapper {
+    width: 100%; table-layout: fixed;
+    background-color: #0f0f11; padding: 50px 0;
+}
+
+.email-container {
+    max-width: 500px; margin: 0 auto;
+    background-color: #1a1a1e;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    text-align: center; padding: 35px 20px 20px;
+}
+.brand-name {
+    font-size: 28px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #d4af37; /* Gold accent */
+}
+
+/* Content */
+.email-content {
+    padding: 10px 40px 40px; text-align: center;
+}
+.greeting {
+    font-size: 18px; font-weight: 500;
+    color: #f8fafc; margin-bottom: 8px;
+}
+.greeting span { color: #d4af37; }
+.message {
+    font-size: 15px; color: #94a3b8; margin-bottom: 25px; line-height: 1.5;
+}
+
+/* Details Box */
+.details-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px; padding: 25px 20px;
+    margin-bottom: 25px; text-align: left;
+}
+.detail-row {
+    display: flex; justify-content: space-between;
+    margin-bottom: 12px; font-size: 14px;
+}
+.detail-row:last-child { margin-bottom: 0; }
+.detail-label { color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; }
+.detail-value { color: #d4af37; font-weight: 600; }
+
+/* Note */
+.expiry-note {
+    font-size: 13px; color: #94a3b8;
+    background: rgba(0,0,0,0.2);
+    padding: 15px; border-radius: 8px;
+    border-left: 3px solid #d4af37;
+    text-align: left; margin-bottom: 25px;
+}
+
+/* Button */
+.button {
+    display: inline-block;
+    background: rgba(212, 175, 55, 0.1);
+    color: #d4af37; border: 1px solid rgba(212, 175, 55, 0.5);
+    padding: 12px 24px; border-radius: 8px; text-decoration: none;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* Footer */
+.footer {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 25px; font-size: 13px; color: #64748b; margin-top: 25px;
+}
+.footer a { color: #d4af37; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+@media only screen and (max-width: 600px) {
+    .email-container { margin: 0 15px; }
+    .email-content { padding: 10px 25px 30px; }
+}
     </style>
 </head>
-<body>
-    <div class="wrapper">
-        <div class="container">
+<body style="margin:0; padding:0; background:#0f0f11;">
+    <div class="email-wrapper">
+        <div class="email-container">
             <div class="header">
-                <h1 style="margin:0; font-size: 24px;">Security Alert</h1>
+                <div class="brand-name">{{ config('app.name') }}</div>
             </div>
-            <div class="content">
-                <h2 style="margin-top:0;">Hello, {{ explode(' ', $user->name)[0] }}!</h2>
-                <p>This is a security notification to let you know that your account was recently accessed from a new device or location.</p>
+            <div class="email-content">
+                <div class="greeting">Hello, <span>{{ explode(' ', $user->name)[0] }}</span></div>
+                <div class="message">This is a security notification. Your account was recently accessed.</div>
                 
-                <div class="details">
+                <div class="details-box">
                     <div class="detail-row">
-                        <span class="label">Date & Time:</span>
-                        <span class="value">{{ $loginTime }}</span>
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value">{{ $loginTime }}</span>
                     </div>
                     <div class="detail-row">
-                        <span class="label">IP Address:</span>
-                        <span class="value">{{ $ipAddress }}</span>
+                        <span class="detail-label">IP Address</span>
+                        <span class="detail-value">{{ $ipAddress }}</span>
                     </div>
                     <div class="detail-row">
-                        <span class="label">Account Role:</span>
-                        <span class="value" style="text-transform: capitalize;">{{ $user->role }}</span>
+                        <span class="detail-label">Role</span>
+                        <span class="detail-value" style="text-transform: capitalize;">{{ $user->role }}</span>
                     </div>
                 </div>
-
-                <p>If this was you, you can safely ignore this email. However, if you do not recognize this activity, we strongly recommend that you change your password immediately to secure your account.</p>
                 
-                <div style="text-align: center;">
-                    <a href="{{ route('password.request') }}" class="button">Reset Password</a>
+                <div class="expiry-note">
+                    <i>&#9888;</i> If you recognize this activity, you can safely ignore this email. If not, reset your password immediately.
                 </div>
-            </div>
-            <div class="footer">
-                &copy; {{ date('Y') }} Brand Ecommerce. All rights reserved.
+                
+                <a href="{{ route('password.request') }}" class="button">Reset Password</a>
+                
+                <div class="footer">
+                    &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.<br>
+                </div>
             </div>
         </div>
     </div>
