@@ -2,26 +2,27 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Your Password</title>
     <style>
 /* Base styles */
 body {
     margin: 0; padding: 0;
-    background-color: #0f0f11;
+    background-color: #0b1120;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6; color: #e2e8f0;
 }
 
 .email-wrapper {
     width: 100%; table-layout: fixed;
-    background-color: #0f0f11; padding: 50px 0;
+    background-color: #0b1120; padding: 50px 0;
 }
 
 .email-container {
     max-width: 500px; margin: 0 auto;
-    background-color: #1a1a1e;
+    background-color: #0f172a;
     border-radius: 16px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(6, 182, 212, 0.15);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 }
@@ -29,11 +30,12 @@ body {
 /* Header */
 .header {
     text-align: center; padding: 35px 20px 20px;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.08);
 }
 .brand-name {
     font-size: 28px; font-weight: 700;
     letter-spacing: 2px; text-transform: uppercase;
-    color: #d4af37; /* Gold accent */
+    color: #06b6d4;
 }
 
 /* Content */
@@ -44,15 +46,15 @@ body {
     font-size: 18px; font-weight: 500;
     color: #f8fafc; margin-bottom: 8px;
 }
-.greeting span { color: #d4af37; }
+.greeting span { color: #06b6d4; }
 .message {
     font-size: 15px; color: #94a3b8; margin-bottom: 30px;
 }
 
 /* OTP Box */
 .otp-box {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px dashed rgba(212, 175, 55, 0.4);
+    background: rgba(6, 182, 212, 0.04);
+    border: 1px dashed rgba(6, 182, 212, 0.3);
     border-radius: 12px; padding: 25px 20px;
     margin-bottom: 25px;
 }
@@ -62,7 +64,7 @@ body {
 }
 .otp-code {
     font-size: 40px; font-weight: 700;
-    letter-spacing: 10px; color: #d4af37;
+    letter-spacing: 10px; color: #06b6d4;
     font-family: 'Courier New', monospace; margin: 0;
 }
 
@@ -71,7 +73,7 @@ body {
     font-size: 13px; color: #94a3b8;
     background: rgba(0,0,0,0.2);
     padding: 15px; border-radius: 8px;
-    border-left: 3px solid #d4af37;
+    border-left: 3px solid #06b6d4;
     text-align: left; margin-bottom: 25px;
 }
 
@@ -80,8 +82,22 @@ body {
     border-top: 1px solid rgba(255,255,255,0.05);
     padding-top: 25px; font-size: 13px; color: #64748b;
 }
-.footer a { color: #d4af37; text-decoration: none; }
+.footer a { color: #06b6d4; text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
+
+/* Preheader hack — hidden text Gmail picks up as preview */
+.preheader {
+    display: none !important;
+    visibility: hidden;
+    mso-hide: all;
+    font-size: 1px;
+    line-height: 1px;
+    max-height: 0;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    color: #0b1120;
+}
 
 @media only screen and (max-width: 600px) {
     .email-container { margin: 0 15px; }
@@ -90,7 +106,10 @@ body {
 }
     </style>
 </head>
-<body style="margin:0; padding:0; background:#0f0f11;">
+<body style="margin:0; padding:0; background:#0b1120;">
+    <!-- Preheader text for Gmail mobile preview -->
+    <div class="preheader">🔑 Your Password Reset Code: {{ $otp }} — Use this code to reset your password. Expires in 10 minutes.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+
     <div class="email-wrapper">
         <div class="email-container">
             <div class="header">

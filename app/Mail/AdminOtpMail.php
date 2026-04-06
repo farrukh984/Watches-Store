@@ -31,7 +31,7 @@ class AdminOtpMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Your Admin Login OTP',
+            subject: '🔐 Admin Login OTP — ' . config('app.name'),
         );
     }
 

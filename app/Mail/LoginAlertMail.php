@@ -33,7 +33,7 @@ class LoginAlertMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Login Alert: New Sign-in Detected',
+            subject: '🔔 Security Alert: New Sign-in on ' . config('app.name'),
         );
     }
 
