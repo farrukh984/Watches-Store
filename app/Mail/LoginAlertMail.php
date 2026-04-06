@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
 
 class LoginAlertMail extends Mailable
 {
@@ -33,6 +34,7 @@ class LoginAlertMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address(config('mail.from.address'), config('app.name')),
             subject: '🔔 Security Alert: New Sign-in on ' . config('app.name'),
         );
     }

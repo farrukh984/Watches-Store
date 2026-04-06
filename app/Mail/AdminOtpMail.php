@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
 
 class AdminOtpMail extends Mailable
 {
@@ -31,6 +32,7 @@ class AdminOtpMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address(config('mail.from.address'), config('app.name')),
             subject: '🔐 Admin Login OTP — ' . config('app.name'),
         );
     }
