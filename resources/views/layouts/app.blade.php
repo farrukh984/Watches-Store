@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Brand - Ecommerce</title>
+    <title>{{ config('app.name', 'Watches Store') }} — Premium Timepieces</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Brand Ecommerce - Shop the latest trending electronic items, deals and offers">
+    <meta name="description" content="{{ config('app.name', 'Watches Store') }} — Discover premium luxury watches, deals and exclusive collections">
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts (optimized with preconnect + swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Font Awesome Icons -->
@@ -115,7 +117,7 @@
             <div class="l-box"></div>
             <div class="l-box"></div>
         </div>
-        <div class="loader-text">ShopBrand</div>
+        <div class="loader-text">{{ config('app.name', 'Watches Store') }}</div>
     </div>
 
     <script>
@@ -124,8 +126,8 @@
             hideLoader();
         });
 
-        // Failsafe: Hide loader after 3 seconds anyway
-        setTimeout(hideLoader, 3000);
+        // Failsafe: Hide loader after 2 seconds anyway (was 3s - faster for better UX)
+        setTimeout(hideLoader, 2000);
 
         function hideLoader() {
             const loader = document.getElementById('global-loader');
@@ -276,6 +278,7 @@
 
     <!-- GSAP for Smooth Animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
 
     @auth
     <script>

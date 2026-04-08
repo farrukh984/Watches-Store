@@ -3,8 +3,8 @@
     <div class="container footer-top">
 
         <div class="footer-brand">
-            <h3><i class="fa-solid fa-lock logo-icon-footer"></i> Brand</h3>
-            <p>Best information about the company goes here but now lorem ipsum is</p>
+            <h3><i class="fa-regular fa-clock logo-icon-footer"></i> {{ config('app.name', 'Watches Store') }}</h3>
+            <p>Your destination for premium luxury watches and timepieces worldwide</p>
             <div class="social-icons">
                 <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
                 <a href="#"><i class="fa-brands fa-twitter"></i></a>
@@ -58,7 +58,7 @@
 
     <div class="footer-bottom">
         <div class="container footer-bottom-flex">
-            <span>&copy; 2024 Ecommerce.</span>
+            <span>&copy; {{ date('Y') }} {{ config('app.name', 'Watches Store') }}. All rights reserved.</span>
             <div class="footer-app-links">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/180px-Google_Play_Store_badge_EN.svg.png" alt="Google Play" class="app-badge">
                 <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" class="app-badge">

@@ -8,8 +8,8 @@
 
         <div class="logo">
             <a href="{{ route('home') }}" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
-                <span class="logo-icon"><i class="fa-solid fa-lock"></i></span>
-                <span class="brand-name">Brand</span>
+                <span class="logo-icon"><i class="fa-regular fa-clock"></i></span>
+                <span class="brand-name">{{ config('app.name', 'Watches Store') }}</span>
             </a>
         </div>
 

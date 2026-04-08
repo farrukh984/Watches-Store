@@ -1,489 +1,553 @@
 @extends('layouts.app')
 
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/home-premium.css') }}">
+@endsection
+
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-error">
-        {{ session('error') }}
-    </div>
-@endif
-
-<div class="container home-wrapper">
-
-    <!-- ================= HERO SECTION ================= -->
-    <div class="hero-section">
-
-        <div class="sidebar">
-            <ul>
-                @foreach($categories as $category)
-                <li class="{{ $loop->first ? 'active' : '' }}">
-                    <a href="{{ route('products.index', ['category' => $category->id]) }}" style="text-decoration: none; color: inherit; display: block;">
-                        {{ $category->name }}
-                    </a>
-                </li>
-                @endforeach 
-                <li><a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit; display: block;">More category</a></li>
-            </ul>
-        </div>
-
-        <div class="hero-banner">
-            <div class="hero-text">
-                <p class="hero-subtitle">Latest trending</p>
-                <h1>Electronic items</h1>
-                <a href="{{ route('products.index') }}" class="btn-learn-more">Learn more</a>
-            </div>
-            <div class="hero-image">
-                <img src="{{ asset('images/home_banner_figma.png') }}" alt="Electronic Items">
-            </div>
-        </div>
-
-        <div class="hero-right">
-            <div class="card blue-card">
-                <div class="user-welcome">
-                    <div class="card-avatar">
-                        @auth
-                            @if(auth()->user()->profile_image)
-                                <img src="{{ display_image(auth()->user()->profile_image) }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                            @else
-                                <i class="fa-regular fa-circle-user"></i>
-                            @endif
-                        @else
-                            <i class="fa-regular fa-circle-user"></i>
-                        @endauth
-                    </div>
-                    <div class="welcome-text">
-                        <h4>Hi, {{ auth()->check() ? auth()->user()->name : 'user' }}</h4>
-                        <p>let's get started</p>
-                    </div>
-                </div>
-                @if(!auth()->check())
-                    <a href="{{ route('register') }}" class="btn-join">Join now</a>
-                    <a href="{{ route('login') }}" class="btn-login">Log in</a>
-                @else
-                    <a href="{{ auth()->user()->is_admin ? route('admin.dashboard') : route('user.dashboard') }}" class="btn-join">Dashboard</a>
-                @endif
-            </div>
-
-            <div class="card orange-card">
-                <p>Get US $10 off</p>
-                <span>with a new supplier</span>
-            </div>
-
-            <div class="card teal-card">
-                <p>Send quotes with supplier preferences</p>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- ================= DEALS SECTION ================= -->
-    @if($activeDeal)
-    <div class="deals-section">
-
-        <div class="deals-info">
-            <h3>{{ $activeDeal->title }}</h3>
-            <p class="deals-sub">{{ $activeDeal->description }}</p>
-            <div class="countdown" id="countdown">
-                <div class="count-box">
-                    <span class="count-num" id="days">00</span>
-                    <span class="count-label">Days</span>
-                </div>
-                <div class="count-box">
-                    <span class="count-num" id="hours">00</span>
-                    <span class="count-label">Hour</span>
-                </div>
-                <div class="count-box">
-                    <span class="count-num" id="minutes">00</span>
-                    <span class="count-label">Min</span>
-                </div>
-                <div class="count-box">
-                    <span class="count-num" id="seconds">00</span>
-                    <span class="count-label">Sec</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="deals-grid">
-            @foreach($deals as $item)
-            @if($item->product)
-            <div class="deal-item">
-                <a href="{{ route('products.show', $item->product_id) }}" class="deal-link">
-                    <img src="{{ display_image($item->product->image) }}" alt="{{ $item->product->name }}">
-                    <p>{{ $item->product->name }}</p>
-                    
-                    @php
-                        $discountedPrice = $item->product->price * (1 - $item->discount_percent / 100);
-                    @endphp
-                    
-                    <div class="deal-price-info" style="margin-bottom: 8px;">
-                        <span style="font-weight: 700; color: var(--text-primary); font-size: 15px;">
-                            ${{ number_format($discountedPrice, 2) }}
-                        </span>
-                        <span style="text-decoration: line-through; color: var(--text-muted, #8b96a5); font-size: 12px; margin-left: 4px;">
-                            ${{ number_format($item->product->price, 2) }}
-                        </span>
-                    </div>
-
-                    <span class="discount">-{{ $item->discount_percent }}%</span>
+{{-- ══════════════════════════════════════════════════════
+     1. HERO — Split screen: Text left, floating watch right
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-hero">
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="container hero-split">
+        <div class="hero-left" id="heroLeft">
+            <div class="hero-tag"><span class="hero-tag-dot"></span> New Collection 2026</div>
+            <h1 class="hero-heading">Crafted for<br><span class="hero-accent">Perfection</span></h1>
+            <p class="hero-sub">Explore handpicked luxury timepieces from the world's most iconic brands. Every second counts.</p>
+            <div class="hero-btns">
+                <a href="{{ route('products.index') }}" class="btn-hero-primary">
+                    Explore Now <i class="fa-solid fa-arrow-right-long"></i>
+                </a>
+                <a href="#sec-featured" class="btn-hero-ghost">
+                    <i class="fa-regular fa-circle-play"></i> Watch Story
                 </a>
             </div>
+            <div class="hero-mini-stats">
+                <div class="hm-stat"><strong>12K+</strong><span>Happy Clients</span></div>
+                <div class="hm-stat"><strong>500+</strong><span>Luxury Watches</span></div>
+                <div class="hm-stat"><strong>50+</strong><span>Top Brands</span></div>
+            </div>
+        </div>
+        <div class="hero-right-img" id="heroRight">
+            <div class="hero-glow"></div>
+            <img src="{{ asset('images/hero_watch_dark.png') }}" alt="Luxury Watch" class="hero-watch-float" loading="eager">
+            <div class="hero-float-badge hfb-top">
+                <i class="fa-solid fa-certificate"></i> Certified Authentic
+            </div>
+            <div class="hero-float-badge hfb-bottom">
+                <i class="fa-solid fa-shield-halved"></i> 2-Year Warranty
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-cue" id="scrollCue">
+        <div class="scroll-dot"></div>
+    </div>
+</section>
+
+
+{{-- ══════════════════════════════════════════════════════
+     2. BRAND MARQUEE — Infinite scrolling brand names
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-marquee">
+    <div class="marquee-track">
+        <div class="marquee-content">
+            <span>ROLEX</span><span class="mq-dot">⬥</span>
+            <span>OMEGA</span><span class="mq-dot">⬥</span>
+            <span>TAG HEUER</span><span class="mq-dot">⬥</span>
+            <span>CARTIER</span><span class="mq-dot">⬥</span>
+            <span>BREITLING</span><span class="mq-dot">⬥</span>
+            <span>PATEK PHILIPPE</span><span class="mq-dot">⬥</span>
+            <span>HUBLOT</span><span class="mq-dot">⬥</span>
+            <span>IWC</span><span class="mq-dot">⬥</span>
+            <span>TISSOT</span><span class="mq-dot">⬥</span>
+            <span>SEIKO</span><span class="mq-dot">⬥</span>
+            <span>ROLEX</span><span class="mq-dot">⬥</span>
+            <span>OMEGA</span><span class="mq-dot">⬥</span>
+            <span>TAG HEUER</span><span class="mq-dot">⬥</span>
+            <span>CARTIER</span><span class="mq-dot">⬥</span>
+            <span>BREITLING</span><span class="mq-dot">⬥</span>
+            <span>PATEK PHILIPPE</span><span class="mq-dot">⬥</span>
+            <span>HUBLOT</span><span class="mq-dot">⬥</span>
+            <span>IWC</span><span class="mq-dot">⬥</span>
+            <span>TISSOT</span><span class="mq-dot">⬥</span>
+            <span>SEIKO</span><span class="mq-dot">⬥</span>
+        </div>
+    </div>
+</section>
+
+
+{{-- ══════════════════════════════════════════════════════
+     3. FLASH DEALS — Dark neon-accent card strip
+     ══════════════════════════════════════════════════════ --}}
+@if($activeDeal)
+<section class="sec-deals" id="secDeals">
+    <div class="container">
+        <div class="deals-top">
+            <div class="deals-title-wrap">
+                <div class="deals-icon-pulse"><i class="fa-solid fa-bolt-lightning"></i></div>
+                <div>
+                    <h2>Flash Deals</h2>
+                    <p>Limited time offers — grab before they're gone</p>
+                </div>
+            </div>
+            <div class="deals-timer" id="countdown">
+                <div class="dt-block"><span id="days">00</span><small>Days</small></div>
+                <div class="dt-sep">:</div>
+                <div class="dt-block"><span id="hours">00</span><small>Hrs</small></div>
+                <div class="dt-sep">:</div>
+                <div class="dt-block"><span id="minutes">00</span><small>Min</small></div>
+                <div class="dt-sep">:</div>
+                <div class="dt-block"><span id="seconds">00</span><small>Sec</small></div>
+            </div>
+        </div>
+        <div class="deals-strip">
+            @foreach($deals as $item)
+            @if($item->product)
+            <a href="{{ route('products.show', $item->product_id) }}" class="deal-card-v2">
+                <div class="dcv2-discount">-{{ $item->discount_percent }}%</div>
+                <div class="dcv2-img"><img src="{{ display_image($item->product->image) }}" alt="{{ $item->product->name }}" loading="lazy"></div>
+                <div class="dcv2-body">
+                    <p class="dcv2-name">{{ $item->product->name }}</p>
+                    @php $dp = $item->product->price * (1 - $item->discount_percent / 100); @endphp
+                    <span class="dcv2-price">${{ number_format($dp, 2) }}</span>
+                    <span class="dcv2-was">${{ number_format($item->product->price, 2) }}</span>
+                </div>
+            </a>
             @endif
             @endforeach
         </div>
     </div>
-    @endif
+</section>
+@endif
 
 
-    <!-- @foreach($categories as $category)
-    <div class="category-section">
-        <div class="category-left {{ $loop->iteration % 2 == 0 ? 'blue-bg' : 'green-bg' }}">
-            <h3>{!! str_replace(' ', '<br>', $category->name) !!}</h3>
-            <a href="#" class="btn-source">Source now</a>
+{{-- ══════════════════════════════════════════════════════
+     4. CATEGORY EXPLORER — Bento grid with overlay
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-categories" id="secCategories">
+    <div class="container">
+        <div class="sec-head-center">
+            <span class="sec-label">Browse</span>
+            <h2>Shop by Category</h2>
+            <p>Find the perfect watch for every occasion</p>
         </div>
-
+        <div class="bento-grid">
+            @foreach($categories->take(6) as $cat)
+            <a href="{{ route('products.index', ['category' => $cat->id]) }}" class="bento-item {{ $loop->first ? 'bento-large' : '' }}">
+                <div class="bento-bg"
+                    @if($cat->background_image)
+                    style="background-image: url('{{ display_image($cat->background_image) }}')"
+                    @else
+                    style="background: linear-gradient(135deg, hsl({{ $loop->index * 55 + 200 }}, 50%, 20%), hsl({{ $loop->index * 55 + 240 }}, 60%, 10%))"
+                    @endif
+                ></div>
+                <div class="bento-content">
+                    <h3>{{ $cat->name }}</h3>
+                    <span class="bento-count">{{ $cat->products->count() }} items →</span>
+                </div>
+            </a>
+            @endforeach
+        </div>
     </div>
-    @endforeach  -->
+</section>
 
 
-@foreach($categories as $category)
-<div class="category-section">
-    <div class="category-left {{ $loop->iteration % 2 == 0 ? 'blue-bg' : 'green-bg' }}" 
-         @if($category->background_image)
-             style="background-image: url('{{ display_image($category->background_image) }}'); background-size: cover; background-position: center;"
-         @endif
-    >
-        <h3>{!! str_replace(' ', '<br>', $category->name) !!}</h3>
-        <a href="{{ route('products.index', ['category' => $category->id]) }}" class="btn-source">Source now</a>
-    </div>
-            <div class="category-grid">
-            @foreach($category->products->take(8) as $product)
-            <div class="category-item">
-                <a href="{{ route('products.show', $product->id) }}" class="cat-link">
-                    <div class="cat-info">
-                        <p class="cat-name">{{ $product->name }}</p>
-                        <span class="cat-price">
-                            From<br>USD {{ $product->price }}
-                        </span>
+{{-- ══════════════════════════════════════════════════════
+     5. FEATURED COLLECTION — Large showcase cards (2-col)
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-featured" id="sec-featured">
+    <div class="container">
+        <div class="sec-head-left">
+            <span class="sec-label">Curated</span>
+            <h2>Featured Collection</h2>
+        </div>
+        <div class="featured-duo">
+            @foreach($recommended->take(2) as $fp)
+            <div class="feat-card">
+                <div class="feat-img-wrap">
+                    <img src="{{ display_image($fp->image) }}" alt="{{ $fp->name }}" loading="lazy">
+                </div>
+                <div class="feat-details">
+                    <span class="feat-badge">{{ $loop->first ? '🔥 Best Seller' : '⭐ Editor\'s Pick' }}</span>
+                    <h3>{{ $fp->name }}</h3>
+                    <div class="feat-price">${{ number_format($fp->price, 2) }}
+                        @if($fp->old_price)<del>${{ number_format($fp->old_price, 2) }}</del>@endif
                     </div>
-
-                    <img src="{{ display_image($product->image) }}" 
-                         alt="{{ $product->name }}">
-                </a>
+                    <a href="{{ route('products.show', $fp->id) }}" class="feat-btn">View Details <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
             </div>
             @endforeach
         </div>
-</div>
+    </div>
+</section>
+
+
+{{-- ══════════════════════════════════════════════════════
+     6. CATEGORY PRODUCT ROWS — Tabbed sections
+     ══════════════════════════════════════════════════════ --}}
+@foreach($categories->take(3) as $category)
+@if($category->products->count() > 0)
+<section class="sec-prodrow {{ $loop->even ? 'prodrow-alt' : '' }}">
+    <div class="container">
+        <div class="sec-head-between">
+            <h2>{{ $category->name }}</h2>
+            <a href="{{ route('products.index', ['category' => $category->id]) }}" class="link-arrow">See all <i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+        <div class="prodrow-grid">
+            @foreach($category->products->take(5) as $product)
+            <a href="{{ route('products.show', $product->id) }}" class="pcard">
+                <div class="pcard-visual">
+                    <img src="{{ display_image($product->image) }}" alt="{{ $product->name }}" loading="lazy">
+                    <div class="pcard-hover-ring"><i class="fa-solid fa-bag-shopping"></i></div>
+                </div>
+                <div class="pcard-info">
+                    <p>{{ $product->name }}</p>
+                    <strong>${{ number_format($product->price, 2) }}</strong>
+                    @if($product->old_price)<del>${{ number_format($product->old_price, 2) }}</del>@endif
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
 @endforeach
 
 
+{{-- ══════════════════════════════════════════════════════
+     7. PARALLAX CTA STRIP — Full-width quote
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-parallax-cta">
+    <div class="parallax-bg" style="background-image:url('{{ asset('images/hero_watch_banner.png') }}')"></div>
+    <div class="parallax-overlay"></div>
+    <div class="container parallax-content">
+        <h2>"A watch is the most personal piece of art you can wear."</h2>
+        <a href="{{ route('products.index') }}" class="parallax-btn">Discover Our Collection</a>
+    </div>
+</section>
 
 
-</div>
-
-
-<!-- ================= INQUIRY SECTION ================= -->
-
-<div class="inquiry-section" id="inquiry-section" style="background-image: linear-gradient(rgba(var(--inquiry-overlay-rgb, 0, 32, 70), 0.7), rgba(var(--inquiry-overlay-rgb, 0, 32, 70), 0.7)), url('{{ asset('images/figma_home_contact_section.png') }}');">
-    <div class="container inquiry-flex">
-        <div class="inquiry-left">
-            <h2>An easy way to send <br>requests to all suppliers</h2>
-            <p>One request, multiple quotes. Compare prices, delivery times, and supplier qualifications easily in one place.</p>
+{{-- ══════════════════════════════════════════════════════
+     8. WHY CHOOSE US — Glassmorphism info cards
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-why" id="secWhy">
+    <div class="container">
+        <div class="sec-head-center">
+            <span class="sec-label">Our Promise</span>
+            <h2>Why Choose Us</h2>
+            <p>We deliver excellence at every step of your journey</p>
         </div>
+        <div class="why-grid">
+            <div class="why-card why-c1">
+                <div class="why-icon"><i class="fa-solid fa-gem"></i></div>
+                <h4>100% Authentic</h4>
+                <p>Every timepiece is verified and certified genuine with complete documentation.</p>
+            </div>
+            <div class="why-card why-c2">
+                <div class="why-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                <h4>Express Delivery</h4>
+                <p>Free insured shipping worldwide. Track your order in real-time from our warehouse to your door.</p>
+            </div>
+            <div class="why-card why-c3">
+                <div class="why-icon"><i class="fa-solid fa-rotate-left"></i></div>
+                <h4>30-Day Returns</h4>
+                <p>Not satisfied? Return any unworn watch within 30 days for a full refund, no questions asked.</p>
+            </div>
+            <div class="why-card why-c4">
+                <div class="why-icon"><i class="fa-solid fa-headset"></i></div>
+                <h4>24/7 Concierge</h4>
+                <p>Our dedicated watch experts are available around the clock to assist you with anything.</p>
+            </div>
+            <div class="why-card why-c5">
+                <div class="why-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <h4>Secure Payments</h4>
+                <p>Shop with confidence. 256-bit SSL encryption and trusted payment gateways protect your data.</p>
+            </div>
+            <div class="why-card why-c6">
+                <div class="why-icon"><i class="fa-solid fa-gift"></i></div>
+                <h4>Premium Packaging</h4>
+                <p>Each watch arrives in a luxury gift box with authenticity certificate and care kit included.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <div class="inquiry-form">
-            <h4>Send quote to suppliers</h4>
+
+{{-- ══════════════════════════════════════════════════════
+     9. RECOMMENDED — Pinterest-style masonry grid
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-recommended" id="secRecommended">
+    <div class="container">
+        <div class="sec-head-between">
+            <div>
+                <span class="sec-label">Just For You</span>
+                <h2>Recommended</h2>
+            </div>
+            <a href="{{ route('products.index') }}" class="link-arrow">View All <i class="fa-solid fa-chevron-right"></i></a>
+        </div>
+        <div class="rec-masonry">
+            @foreach($recommended as $rp)
+            <a href="{{ route('products.show', $rp->id) }}" class="rec-tile {{ $loop->iteration % 5 == 1 ? 'rec-tall' : '' }}">
+                <div class="rec-tile-img">
+                    <img src="{{ display_image($rp->image) }}" alt="{{ $rp->name }}" loading="lazy">
+                </div>
+                <div class="rec-tile-info">
+                    <p>{{ $rp->name }}</p>
+                    <strong>${{ number_format($rp->price, 2) }}</strong>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+
+{{-- ══════════════════════════════════════════════════════
+     10. INQUIRY / QUOTE — Asymmetric two-tone section
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-inquiry" id="inquiry-section">
+    <div class="inquiry-left-bg"></div>
+    <div class="container inquiry-wrap">
+        <div class="inquiry-text">
+            <span class="sec-label">Get a Quote</span>
+            <h2>Can't find what<br>you're looking for?</h2>
+            <p>Submit your requirements and our sourcing team will find the perfect timepiece from our global supplier network.</p>
+            <div class="inquiry-perks">
+                <div class="iq-perk"><i class="fa-regular fa-circle-check"></i> Multiple Supplier Quotes</div>
+                <div class="iq-perk"><i class="fa-regular fa-circle-check"></i> Price Match Guarantee</div>
+                <div class="iq-perk"><i class="fa-regular fa-circle-check"></i> Expert Consultation</div>
+                <div class="iq-perk"><i class="fa-regular fa-circle-check"></i> Global Sourcing Network</div>
+            </div>
+        </div>
+        <div class="inquiry-form-card">
+            <h4>Send Your Request</h4>
             <form method="POST" action="{{ route('inquiry.send') }}">
                 @csrf
-                <div class="form-group">
-                    <input type="text" name="item" placeholder="What item you need?" class="form-control" required>
+                <div class="iq-field">
+                    <label>What are you looking for?</label>
+                    <input type="text" name="item" placeholder="e.g. Rolex Submariner" required>
                 </div>
-                <div class="form-group">
-                    <textarea name="details" placeholder="Type more details" rows="3" class="form-control"></textarea>
+                <div class="iq-field">
+                    <label>Additional Details</label>
+                    <textarea name="details" placeholder="Condition, year, specific model..." rows="3"></textarea>
                 </div>
-
-                <div class="form-row">
-                    <input type="number" name="quantity" placeholder="Quantity" class="form-control" required>
-                    <select name="unit" class="form-control">
-                        <option value="Pcs">Pcs</option>
-                        <option value="Kg">Kg</option>
-                        <option value="Sets">Sets</option>
-                    </select>
+                <div class="iq-row">
+                    <div class="iq-field">
+                        <label>Quantity</label>
+                        <input type="number" name="quantity" placeholder="1" required>
+                    </div>
+                    <div class="iq-field">
+                        <label>Unit</label>
+                        <select name="unit">
+                            <option value="Pcs">Pieces</option>
+                            <option value="Sets">Sets</option>
+                        </select>
+                    </div>
                 </div>
-
-                <button type="submit" class="btn-inquiry">Send inquiry</button>
+                <button type="submit" class="iq-submit">Submit Request <i class="fa-solid fa-paper-plane"></i></button>
             </form>
         </div>
     </div>
-</div>
+</section>
 
 
-<div class="container">
-
-    <!-- ================= RECOMMENDED ================= -->
-
-    <div class="recommended-section">
-        <h3>Recommended items</h3>
-
-        <div class="recommended-grid">
-
-@foreach($recommended as $product)
-<div class="recommended-item">
-    <a href="{{ route('products.show', $product->id) }}" class="rec-link">
-        <img src="{{ display_image($product->image) }}" alt="{{ $product->name }}">
-
-        <div class="rec-info">
-            <h4>${{ $product->price }}</h4>
-            <p>{{ $product->name }}</p>
-
-            @if($product->old_price)
-                <small class="old-price">
-                    ${{ $product->old_price }}
-                </small>
-            @endif
+{{-- ══════════════════════════════════════════════════════
+     11. TESTIMONIALS — Customer reviews
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-testimonials" id="secTestimonials">
+    <div class="container">
+        <div class="sec-head-center">
+            <span class="sec-label">Reviews</span>
+            <h2>What Our Customers Say</h2>
         </div>
-    </a>
-</div>
-@endforeach
-
-</div>
-
-    </div>
-
-    <!-- ================= EXTRA SERVICES ================= -->
-
-    <div class="extra-services">
-        <h3>Our extra services</h3>
-
-        <div class="services-grid">
-
-            <a href="{{ route('products.index') }}" class="service-link">
-                <div class="service-item">
-                    <div class="service-img-wrapper">
-                        <img src="{{ asset('images/Extra_services_1.png') }}" alt="Industry Hubs">
-                        <div class="service-icon blue">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </div>
-                    </div>
-                    <p>Source from Industry Hubs</p>
+        <div class="testi-row">
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p>"Absolutely stunning watch! The quality exceeded my expectations. Fast shipping and impeccable packaging. Will definitely order again."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar ta-1">A</div>
+                    <div><strong>Ahmed K.</strong><span>Verified Buyer</span></div>
                 </div>
-            </a>
-
-            <a href="{{ route('products.index') }}" class="service-link">
-                <div class="service-item">
-                    <div class="service-img-wrapper">
-                        <img src="{{ asset('images/Extra_services_2.png') }}" alt="Customize Products">
-                        <div class="service-icon green">
-                            <i class="fa-solid fa-boxes-stacked"></i>
-                        </div>
-                    </div>
-                    <p>Customize Your Products</p>
+            </div>
+            <div class="testi-card testi-highlight">
+                <div class="testi-stars">★★★★★</div>
+                <p>"I've been collecting watches for 15 years and this store has the best selection I've found online. Their authentication process gives me total confidence."</p>
+                <div class="testi-author">
+                    <div class="testi-avatar ta-2">S</div>
+                    <div><strong>Sarah M.</strong><span>Premium Member</span></div>
                 </div>
-            </a>
-
-            <a href="{{ route('products.index') }}" class="service-link">
-                <div class="service-item">
-                    <div class="service-img-wrapper">
-                        <img src="{{ asset('images/Extra_services_3.png') }}" alt="Shipping">
-                        <div class="service-icon orange">
-                            <i class="fa-solid fa-truck-fast"></i>
-                        </div>
-                    </div>
-                    <p>Fast, reliable shipping by ocean or air</p>
+            </div>
+            <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p>"Received my order in just 3 days with beautiful gift wrapping. The customer service team was incredibly helpful. Highly recommended!"</p>
+                <div class="testi-author">
+                    <div class="testi-avatar ta-3">R</div>
+                    <div><strong>Rizwan A.</strong><span>Verified Buyer</span></div>
                 </div>
-            </a>
-
-            <a href="{{ route('products.index') }}" class="service-link">
-                <div class="service-item">
-                    <div class="service-img-wrapper">
-                        <img src="{{ asset('images/Extra_services_4.png') }}" alt="Monitoring">
-                        <div class="service-icon indigo">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-                    </div>
-                    <p>Product monitoring and inspection</p>
-                </div>
-            </a>
-
+            </div>
         </div>
     </div>
+</section>
 
 
-
-    <!-- ================= SUPPLIERS ================= -->
-
-    <div class="suppliers-section">
-        <h3>Suppliers by region</h3>
-
-        <div class="suppliers-grid">
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/ae.png" alt="UAE">
-                    <div class="supplier-info">
-                        <strong>Arabic Emirates</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/au.png" alt="Australia">
-                    <div class="supplier-info">
-                        <strong>Australia</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/us.png" alt="USA">
-                    <div class="supplier-info">
-                        <strong>United States</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/ru.png" alt="Russia">
-                    <div class="supplier-info">
-                        <strong>Russia</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/it.png" alt="Italy">
-                    <div class="supplier-info">
-                        <strong>Italy</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/dk.png" alt="Denmark">
-                    <div class="supplier-info">
-                        <strong>Denmark</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/fr.png" alt="France">
-                    <div class="supplier-info">
-                        <strong>France</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/cn.png" alt="China">
-                    <div class="supplier-info">
-                        <strong>China</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
-            <a href="{{ route('products.index') }}" style="text-decoration: none; color: inherit;">
-                <div class="supplier-card">
-                    <img src="https://flagcdn.com/80x60/gb.png" alt="Great Britain">
-                    <div class="supplier-info">
-                        <strong>Great Britain</strong>
-                        <span>shopname.ae</span>
-                    </div>
-                </div>
-            </a>
+{{-- ══════════════════════════════════════════════════════
+     12. STATS COUNTER — Animated numbers strip
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-counter" id="secCounter">
+    <div class="container counter-grid">
+        <div class="counter-item">
+            <span class="counter-num" data-target="12500">0</span>
+            <p>Watches Sold</p>
+        </div>
+        <div class="counter-item">
+            <span class="counter-num" data-target="98">0</span>
+            <p>% Satisfaction</p>
+        </div>
+        <div class="counter-item">
+            <span class="counter-num" data-target="55">0</span>
+            <p>Countries Served</p>
+        </div>
+        <div class="counter-item">
+            <span class="counter-num" data-target="24">0</span>
+            <p>/ 7 Support</p>
         </div>
     </div>
+</section>
 
 
-    <!-- ================= NEWSLETTER ================= -->
-
-    <div class="newsletter">
-        <h3>Subscribe on our newsletter</h3>
-        <p>Get daily news on upcoming offers from many suppliers all over the world</p>
-
-        <form method="POST" action="{{ route('newsletter.subscribe') }}" class="newsletter-form">
-            @csrf
-            <input type="email" name="email" placeholder="Email" required>
-            <button type="submit">Subscribe</button>
-        </form>
+{{-- ══════════════════════════════════════════════════════
+     13. NEWSLETTER — Gradient card with pattern
+     ══════════════════════════════════════════════════════ --}}
+<section class="sec-newsletter" id="secNewsletter">
+    <div class="container">
+        <div class="nl-card">
+            <div class="nl-pattern"></div>
+            <div class="nl-inner">
+                <div class="nl-text">
+                    <i class="fa-regular fa-bell nl-bell"></i>
+                    <h3>Don't Miss Out</h3>
+                    <p>Subscribe for exclusive launches, flash sales & VIP access to limited editions.</p>
+                </div>
+                <form method="POST" action="{{ route('newsletter.subscribe') }}" class="nl-form">
+                    @csrf
+                    <div class="nl-input-group">
+                        <input type="email" name="email" placeholder="your@email.com" required>
+                        <button type="submit">Subscribe</button>
+                    </div>
+                    <span class="nl-note"><i class="fa-solid fa-lock"></i> We respect your privacy. Unsubscribe anytime.</span>
+                </form>
+            </div>
+        </div>
     </div>
+</section>
 
-</div>
 
 @endsection
 
 
 @section('scripts')
 <script>
-// Countdown Timer — Dynamic from admin deal
-function startCountdown() {
+document.addEventListener('DOMContentLoaded', function() {
+
+    /* ── Countdown Timer ── */
     @if($activeDeal && $activeDeal->end_date)
-        const endDate = new Date("{{ $activeDeal->end_date->toIso8601String() }}");
-    @else
-        // Fallback: no active deal, show zeros
-        document.getElementById('days').textContent = '00';
-        document.getElementById('hours').textContent = '00';
-        document.getElementById('minutes').textContent = '00';
-        document.getElementById('seconds').textContent = '00';
-        return;
+    (function(){
+        const end = new Date("{{ $activeDeal->end_date->toIso8601String() }}");
+        function tick(){
+            const d = end - new Date();
+            if(d<=0){ const s=document.querySelector('.sec-deals'); if(s) s.style.display='none'; return; }
+            document.getElementById('days').textContent    = String(Math.floor(d/864e5)).padStart(2,'0');
+            document.getElementById('hours').textContent   = String(Math.floor(d%864e5/36e5)).padStart(2,'0');
+            document.getElementById('minutes').textContent = String(Math.floor(d%36e5/6e4)).padStart(2,'0');
+            document.getElementById('seconds').textContent = String(Math.floor(d%6e4/1e3)).padStart(2,'0');
+        }
+        tick(); setInterval(tick,1000);
+    })();
     @endif
 
-    function updateTimer() {
-        const now = new Date();
-        const diff = endDate - now;
 
-        if (diff <= 0) {
-            document.getElementById('days').textContent = '00';
-            document.getElementById('hours').textContent = '00';
-            document.getElementById('minutes').textContent = '00';
-            document.getElementById('seconds').textContent = '00';
-            // Hide section when time is up
-            const section = document.querySelector('.deals-section');
-            if(section) section.style.display = 'none';
-            return;
-        }
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        document.getElementById('days').textContent = String(days).padStart(2, '0');
-        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    /* ── Animated Counter ── */
+    const counterSection = document.getElementById('secCounter');
+    if(counterSection){
+        let counted = false;
+        const countObs = new IntersectionObserver(entries => {
+            if(entries[0].isIntersecting && !counted){
+                counted = true;
+                document.querySelectorAll('.counter-num').forEach(el => {
+                    const target = +el.dataset.target;
+                    const step = target / 60;
+                    let cur = 0;
+                    const timer = setInterval(() => {
+                        cur += step;
+                        if(cur >= target){ el.textContent = target.toLocaleString(); clearInterval(timer); }
+                        else el.textContent = Math.floor(cur).toLocaleString();
+                    }, 25);
+                });
+            }
+        }, { threshold: 0.4 });
+        countObs.observe(counterSection);
     }
 
-    updateTimer();
-    setInterval(updateTimer, 1000);
-}
 
-// Auto-hide success/error messages after 5 seconds
-document.addEventListener('DOMContentLoaded', function() {
-    startCountdown();
-    
-    const alerts = document.querySelectorAll('.alert-success, .alert-error');
-    alerts.forEach(function(alert) {
-        setTimeout(function() {
-            alert.style.transition = 'opacity 0.5s';
-            alert.style.opacity = '0';
-            setTimeout(function() {
-                alert.remove();
-            }, 500);
-        }, 5000);
-    });
+    /* ── GSAP Animations ── */
+    if(typeof gsap !== 'undefined'){
+
+        // Hero entrance
+        const tl = gsap.timeline({ defaults:{ ease:'power3.out' } });
+        tl.from('#heroLeft .hero-tag', { x:-40, opacity:0, duration:0.5 })
+          .from('#heroLeft .hero-heading', { y:50, opacity:0, duration:0.7 }, '-=0.2')
+          .from('#heroLeft .hero-sub', { y:30, opacity:0, duration:0.5 }, '-=0.3')
+          .from('#heroLeft .hero-btns', { y:20, opacity:0, duration:0.5 }, '-=0.2')
+          .from('#heroLeft .hm-stat', { y:15, opacity:0, stagger:0.1, duration:0.4 }, '-=0.2')
+          .from('#heroRight', { x:60, opacity:0, duration:0.8, ease:'power2.out' }, '-=0.8')
+          .from('.hfb-top', { y:-20, opacity:0, duration:0.5 }, '-=0.3')
+          .from('.hfb-bottom', { y:20, opacity:0, duration:0.5 }, '-=0.3')
+          .from('#scrollCue', { opacity:0, duration:0.4 });
+
+        // Floating watch animation
+        gsap.to('.hero-watch-float', {
+            y: -15, duration: 2.5, repeat: -1, yoyo: true, ease: 'sine.inOut'
+        });
+
+        // Scroll-triggered sections
+        const reveals = document.querySelectorAll('.sec-deals, .sec-categories, .sec-featured, .sec-prodrow, .sec-parallax-cta, .sec-why, .sec-recommended, .sec-inquiry, .sec-testimonials, .sec-counter, .sec-newsletter');
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if(e.isIntersecting){
+                    e.target.classList.add('revealed');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold:0.08, rootMargin:'0px 0px -40px 0px' });
+        reveals.forEach(s => io.observe(s));
+
+        // Parallax on hero
+        const hImg = document.querySelector('.hero-watch-float');
+        window.addEventListener('scroll', () => {
+            const s = window.scrollY;
+            if(s < 900 && hImg){
+                hImg.style.transform = `translateY(${-15 + s*0.08}px)`;
+            }
+        }, {passive:true});
+    }
+
+
+    /* ── Hero Particle Effect (lightweight) ── */
+    const canvas = document.getElementById('heroParticles');
+    if(canvas){
+        // Create floating dots using CSS
+        for(let i=0;i<20;i++){
+            const dot = document.createElement('div');
+            dot.className = 'particle-dot';
+            dot.style.left = Math.random()*100+'%';
+            dot.style.top = Math.random()*100+'%';
+            dot.style.animationDelay = Math.random()*6+'s';
+            dot.style.animationDuration = (4+Math.random()*6)+'s';
+            canvas.appendChild(dot);
+        }
+    }
 });
 </script>
 @endsection
