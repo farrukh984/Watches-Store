@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
 <link rel="stylesheet" href="{{ asset('css/home-premium.css') }}">
 @endsection
 
@@ -10,43 +11,73 @@
      1. HERO — Real-world E-commerce Shoppable Banner
      ══════════════════════════════════════════════════════ --}}
 <section class="ec-hero">
-    <div class="ec-hero-bg">
-        <div class="ec-hero-gradient"></div>
-    </div>
-    <div class="container ec-hero-inner">
-        <div class="ec-hero-content" id="heroLeft">
-            <div class="ec-badge">Available Now</div>
-            <h1 class="ec-hero-title">The Oceanographer<br><span>Collection</span></h1>
-            <p class="ec-hero-desc">Discover our exclusive selection of chronographs engineered for the deep. Featuring luminescent markers and 500m water resistance.</p>
-            
-            <div class="ec-hero-actions">
-                <a href="{{ route('products.index') }}" class="ec-btn-primary">
-                    Shop Collection
-                </a>
-                <a href="#new-arrivals" class="ec-btn-secondary">
-                    View Lookbook
-                </a>
-            </div>
+    <div class="ec-hero-bg"></div>
+    
+    <div class="swiper ec-hero-swiper">
+        <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide">
+                <div class="container swiper-slide-inner">
+                    <div class="ec-hero-content">
+                        <div class="ec-badge">Available Now</div>
+                        <h1 class="ec-hero-title">The Oceanographer<br><span>Collection</span></h1>
+                        <p class="ec-hero-desc">Discover our exclusive selection of chronographs engineered for the deep. Featuring luminescent markers and 500m water resistance.</p>
+                        
+                        <div class="ec-hero-actions">
+                            <a href="{{ route('products.index') }}" class="ec-btn-primary">
+                                Shop Collection
+                            </a>
+                            <a href="#new-arrivals" class="ec-btn-secondary">
+                                View Lookbook
+                            </a>
+                        </div>
 
-            <div class="ec-hero-trust">
-                <span><i class="fa-solid fa-check-circle"></i> Authenticity Guaranteed</span>
-                <span><i class="fa-solid fa-truck-fast"></i> Free Global Shipping</span>
-            </div>
-        </div>
+                        <div class="ec-hero-trust">
+                            <span><i class="fa-solid fa-check-circle"></i> Authenticity Guaranteed</span>
+                            <span><i class="fa-solid fa-truck-fast"></i> Free Global Shipping</span>
+                        </div>
+                    </div>
 
-        <div class="ec-hero-product" id="heroRight">
-            <div class="ec-hero-glow"></div>
-            <img src="{{ asset('images/hero_watch_cyan.png') }}" class="ec-hero-img" alt="Luxury Watch">
-            <!-- Shoppable floating tag -->
-            <a href="{{ route('products.index') }}" class="ec-shoppable-tag">
-                <div class="ec-tag-dot"></div>
-                <div class="ec-tag-info">
-                    <small>Featured Model</small>
-                    <strong>AquaTerra Series 4</strong>
-                    <span>Shop Now <i class="fa-solid fa-arrow-right"></i></span>
+                    <div class="ec-hero-product">
+                        <div class="ec-hero-glow"></div>
+                        <img src="{{ asset('images/hero_watch_cyan.png') }}" class="ec-hero-img" alt="Luxury Watch">
+                        <!-- Shoppable floating tag -->
+                        <a href="{{ route('products.index') }}" class="ec-shoppable-tag">
+                            <div class="ec-tag-dot"></div>
+                            <div class="ec-tag-info">
+                                <small>Featured Model</small>
+                                <strong>AquaTerra Series 4</strong>
+                                <span>Shop Now <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </a>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="swiper-slide">
+                <div class="container swiper-slide-inner">
+                    <div class="ec-hero-content">
+                        <div class="ec-badge" style="color:var(--ec-accent); border-color:var(--ec-accent);">Limited Release</div>
+                        <h1 class="ec-hero-title">Celestial Aviator<br><span>Chronograph</span></h1>
+                        <p class="ec-hero-desc">Engineered for absolute precision in the skies. A masterpiece blending heritage aesthetics with modern aerodynamics.</p>
+                        
+                        <div class="ec-hero-actions">
+                            <a href="{{ route('products.index') }}" class="ec-btn-primary" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow:0 4px 15px rgba(16,185,129,0.3);">
+                                Shop Now
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="ec-hero-product">
+                        <div class="ec-hero-glow" style="background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%);"></div>
+                        <img src="{{ asset('images/hero_watch_cyan.png') }}" style="filter: hue-rotate(150deg) drop-shadow(0 20px 40px rgba(0,0,0,0.6));" class="ec-hero-img" alt="Aviator Watch">
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <div class="ec-swiper-pagination"></div>
     </div>
 </section>
 
@@ -64,6 +95,27 @@
             @endforeach
             <a href="{{ route('products.index') }}" class="ec-qcat ec-qcat-sale">Sale & Offers</a>
         </div>
+    </div>
+</section>
+
+{{-- ══════════════════════════════════════════════════════
+     2.5 BRANDS MARQUEE
+     ══════════════════════════════════════════════════════ --}}
+<section class="ec-brand-marquee">
+    <div class="ec-marquee-track">
+        <!-- Duplicate elements for infinite scroll illusion -->
+        <span class="ec-brand-item">Rolex</span>
+        <span class="ec-brand-item">Omega</span>
+        <span class="ec-brand-item">Patek Philippe</span>
+        <span class="ec-brand-item">Cartier</span>
+        <span class="ec-brand-item">Tag Heuer</span>
+        <span class="ec-brand-item">Audemars Piguet</span>
+        <span class="ec-brand-item">Rolex</span>
+        <span class="ec-brand-item">Omega</span>
+        <span class="ec-brand-item">Patek Philippe</span>
+        <span class="ec-brand-item">Cartier</span>
+        <span class="ec-brand-item">Tag Heuer</span>
+        <span class="ec-brand-item">Audemars Piguet</span>
     </div>
 </section>
 
@@ -147,37 +199,55 @@
         <div class="ec-section-header">
             <h2>New Arrivals</h2>
             <div class="ec-shelf-nav">
-                <button class="ec-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
-                <button class="ec-nav-btn active"><i class="fa-solid fa-chevron-right"></i></button>
+                <button class="ec-nav-btn ec-prev"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="ec-nav-btn ec-next"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
 
-        <div class="ec-shelf-track">
-            @foreach($recommended->take(5) as $product)
-            <div class="ec-product-card">
-                @if($loop->first) <div class="ec-new-tag">New</div> @endif
-                <button class="ec-wishlist-btn"><i class="fa-regular fa-heart"></i></button>
-                
-                <a href="{{ route('products.show', $product->id) }}" class="ec-pc-image">
-                    <img src="{{ display_image($product->image) }}" alt="{{ $product->name }}" loading="lazy">
-                    <div class="ec-pc-actions">
-                        <form action="{{ route('cart.add', $product->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="ec-add-to-cart">
-                                <i class="fa-solid fa-cart-shopping"></i> Add to Cart
-                            </button>
-                        </form>
-                    </div>
-                </a>
-                <div class="ec-pc-info">
-                    <div class="ec-pc-brand">Swiss Made</div>
-                    <a href="{{ route('products.show', $product->id) }}" class="ec-pc-title">{{ $product->name }}</a>
-                    <div class="ec-pc-pricing">
-                        <span class="ec-pc-price">${{ number_format($product->price, 2) }}</span>
+        <div class="swiper ec-products-swiper">
+            <div class="swiper-wrapper">
+                @foreach($recommended->take(8) as $product)
+                <div class="swiper-slide">
+                    <div class="ec-product-card">
+                        @if($loop->first) <div class="ec-new-tag">New</div> @endif
+                        <button class="ec-wishlist-btn"><i class="fa-regular fa-heart"></i></button>
+                        
+                        <a href="{{ route('products.show', $product->id) }}" class="ec-pc-image">
+                            <img src="{{ display_image($product->image) }}" alt="{{ $product->name }}" loading="lazy">
+                            <div class="ec-pc-actions">
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="ec-add-to-cart">
+                                        <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                        </a>
+                        <div class="ec-pc-info">
+                            <div class="ec-pc-brand">Swiss Made</div>
+                            <a href="{{ route('products.show', $product->id) }}" class="ec-pc-title">{{ $product->name }}</a>
+                            <div class="ec-pc-pricing">
+                                <span class="ec-pc-price">${{ number_format($product->price, 2) }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                @endforeach
             </div>
-            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- ══════════════════════════════════════════════════════
+     5.5 PARALLAX BANNER (CRAFTSMANSHIP)
+     ══════════════════════════════════════════════════════ --}}
+<section class="container">
+    <div class="ec-parallax-banner" style="background-image: url('{{ asset('images/banner1.jpg') }}');">
+        <div class="ec-pb-overlay"></div>
+        <div class="ec-pb-content">
+            <h2>The Art of Horology</h2>
+            <p>Every timepiece tells a story of generational craftsmanship, meticulous engineering, and unyielding dedication to perfection. Discover watches that transcend time.</p>
+            <a href="{{ route('products.index') }}" class="ec-btn-primary">Explore Legacy</a>
         </div>
     </div>
 </section>
@@ -246,6 +316,47 @@
 </section>
 
 {{-- ══════════════════════════════════════════════════════
+     7.5 CLIENT TESTIMONIALS
+     ══════════════════════════════════════════════════════ --}}
+<section class="ec-testimonials">
+    <div class="container">
+        <h2>What Our Collectors Say</h2>
+        <div class="swiper ec-reviews-swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="ec-review-card">
+                        <div class="ec-rc-stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="ec-rc-quote">"An absolutely flawless experience. The watch arrived overnight in pristine condition with all original papers. The Midnight Ocean theme is stunning."</p>
+                        <span class="ec-rc-author">— Alexander J.</span>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="ec-review-card">
+                        <div class="ec-rc-stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="ec-rc-quote">"The authenticity guaranteed service gave me the peace of mind I needed for such a high-end purchase. Truly the standard for luxury e-commerce."</p>
+                        <span class="ec-rc-author">— Marcus T.</span>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="ec-review-card">
+                        <div class="ec-rc-stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                        <p class="ec-rc-quote">"Incredible selection of rare timepieces. The customer support team was knowledgeable and extremely helpful during the checkout process."</p>
+                        <span class="ec-rc-author">— Sophia L.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ec-swiper-pagination ec-reviews-pagination"></div>
+        </div>
+    </div>
+</section>
+
+{{-- ══════════════════════════════════════════════════════
      8. MAILING LIST — Clean E-commerce Newsletter
      ══════════════════════════════════════════════════════ --}}
 <section class="ec-newsletter">
@@ -270,6 +381,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     /* ── E-commerce Countdown Timer ── */
@@ -290,12 +402,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /* ── Scroll Animations ── */
     if(typeof gsap !== 'undefined'){
-        gsap.from('#heroLeft > *', {
-            y: 30, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out"
-        });
-        gsap.from('#heroRight', {
-            x: 50, opacity: 0, duration: 1, delay: 0.3, ease: "power2.out"
-        });
         gsap.to('.ec-hero-img', {
             y: -15, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut"
         });
@@ -319,6 +425,85 @@ document.addEventListener('DOMContentLoaded', function() {
             observer.observe(sec);
         });
     }
+
+    /* ── Swiper Carousel (Hero) ── */
+    new Swiper('.ec-hero-swiper', {
+        loop: true,
+        parallax: true,
+        speed: 1200, // Smooth slow transition
+        autoplay: {
+            delay: 6000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.ec-swiper-pagination',
+            clickable: true,
+        },
+        effect: 'fade',
+        fadeEffect: { crossFade: true },
+        on: {
+            // Re-trigger GSAP animations on every slide change for maximum premium feel
+            slideChangeTransitionStart: function () {
+                const activeSlide = this.slides[this.activeIndex];
+                if(typeof gsap !== 'undefined') {
+                    // Reset and animate text elements
+                    gsap.fromTo(activeSlide.querySelectorAll('.ec-hero-title, .ec-hero-desc, .ec-hero-actions, .ec-badge, .ec-hero-trust'), 
+                        { y: 30, opacity: 0 }, 
+                        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+                    );
+                    // Reset and animate image/product
+                    gsap.fromTo(activeSlide.querySelectorAll('.ec-hero-product'), 
+                        { x: 50, opacity: 0, scale: 0.95 },
+                        { x: 0, opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out', delay: 0.2 }
+                    );
+                }
+            },
+            init: function () {
+                // Initialize first slide animation
+                const activeSlide = this.slides[this.activeIndex];
+                if(typeof gsap !== 'undefined') {
+                    gsap.fromTo(activeSlide.querySelectorAll('.ec-hero-title, .ec-hero-desc, .ec-hero-actions, .ec-badge, .ec-hero-trust'), 
+                        { y: 30, opacity: 0 }, 
+                        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+                    );
+                    gsap.fromTo(activeSlide.querySelectorAll('.ec-hero-product'), 
+                        { x: 50, opacity: 0, scale: 0.95 },
+                        { x: 0, opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out', delay: 0.2 }
+                    );
+                }
+            }
+        }
+    });
+
+    /* ── Swiper Carousel (Products Shelf) ── */
+    new Swiper('.ec-products-swiper', {
+        slidesPerView: 1.2, // Peek next slide on mobile
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.ec-nav-btn.ec-next',
+            prevEl: '.ec-nav-btn.ec-prev',
+        },
+        breakpoints: {
+            576: { slidesPerView: 2.2, spaceBetween: 20 },
+            768: { slidesPerView: 3.2, spaceBetween: 20 },
+            992: { slidesPerView: 4, spaceBetween: 24 }
+        }
+    });
+
+    /* ── Swiper Carousel (Testimonials) ── */
+    new Swiper('.ec-reviews-swiper', {
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.ec-reviews-pagination',
+            clickable: true,
+        },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+    });
 });
 </script>
 @endsection
